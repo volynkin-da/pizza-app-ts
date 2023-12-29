@@ -1,0 +1,22 @@
+* {
+    margin: 0;
+    text-decoration: none;
+}
+:root {
+    --font: 'Open Sans', sans-serif;
+    --primary-color: #fe724c;
+    --primary-hover-color: #e66846;
+
+    --text-color: #000000;
+    --text-secondary-color: #5b5b5e;
+    --text-input-color: #c4c4c4;
+
+    --white-color: #ffffff;
+    --separator-color: #d4d6e0;
+
+    margin: 0px;
+}
+
+body {
+    font-family: 'Open Sans', sans-serif;
+}

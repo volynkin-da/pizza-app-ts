@@ -1,0 +1,13 @@
+.head {
+    display: flex;
+    justify-content: space-between;
+
+    width: 815px;
+    margin-bottom: 40px;
+}
+
+.menu {
+    padding: 40px 60px;
+    display: flex;
+    flex-direction: column;
+}
