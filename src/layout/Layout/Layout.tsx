@@ -34,7 +34,10 @@ export function Layout() {
                         }
                         to="/cart"
                     >
-                        <img src="cart-icon.svg" alt="Иконка карточки" />
+                        <img
+                            src="/cart-button-icon.svg"
+                            alt="Иконка карточки"
+                        />
                         <span>Корзина</span>
 
                         <span className={styles['productColumn']}>
@@ -45,7 +48,7 @@ export function Layout() {
                 <Button className={styles['exit']} appearence="small">
                     <img
                         className={styles['logoutIcon']}
-                        src="cart-button-icon.svg"
+                        src="exit-icon.svg"
                         alt="кнопка выхода"
                     />
                     <span>Выйти</span>

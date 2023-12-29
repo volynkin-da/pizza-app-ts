@@ -17,10 +17,10 @@ function CartItem(props: CartItemProps) {
                 </button>
                 <div className={styles['number']}>{props.count}</div>
                 <button className={styles['plus']}>
-                    <img src="/plus-icon.svg" alt="Добавить в корзину" />
+                    <img src="plus-icon.svg" alt="Добавить в корзину" />
                 </button>
                 <button className={styles['remove']}>
-                    <img src="/delete-icon.svg" alt="Удалить все" />
+                    <img src="delete-icon.svg" alt="Удалить все" />
                 </button>
             </div>
         </div>
