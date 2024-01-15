@@ -1,0 +1,89 @@
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { loadState } from './storage';
+import { LoginResponse } from '../interfaces/auth.interface';
+import { PREFIX } from '../helpers/API';
+import axios, { AxiosError } from 'axios';
+import { Profile } from '../interfaces/user.interface';
+import { RootState } from '../store/store';
+
+export const JWT_PERSISTENT_STATE = 'userData';
+
+export interface UserPersistentState {
+    jwt: string | null;
+}
+
+export interface UserState {
+    jwt: string | null;
+    loginErrorMessage?: string;
+    profile?: Profile;
+}
+
+const initialState: UserState = {
+    jwt: loadState<UserPersistentState>(JWT_PERSISTENT_STATE)?.jwt ?? null
+};
+
+export const login = createAsyncThunk(
+    'user/login',
+    async (params: { email: string; password: string }) => {
+        try {
+            const { data } = await axios.post<LoginResponse>(
+                `${PREFIX}/auth/login`,
+                {
+                    email: params.email,
+                    password: params.password
+                }
+            );
+            return data;
+        } catch (e) {
+            if (e instanceof AxiosError) {
+                throw new Error(e.response?.data.message);
+            }
+        }
+    }
+);
+
+export const getProfile = createAsyncThunk<Profile, void, { state: RootState }>(
+    'user/getProfile',
+    async (_, thunkApi) => {
+        const jwt = thunkApi.getState().user.jwt;
+        const { data } = await axios.get<Profile>(`${PREFIX}/user/profile`, {
+            headers: {
+                Authorization: `Bearer ${jwt}`
+            }
+        });
+        return data;
+    }
+);
+
+export const userSlise = createSlice({
+    name: 'user',
+    initialState,
+    reducers: {
+        logout: (state) => {
+            state.jwt = null;
+            state.profile = undefined;
+        },
+        clearLoginError: (state) => {
+            state.loginErrorMessage = undefined;
+        }
+    },
+    extraReducers: (builder) => {
+        builder.addCase(login.fulfilled, (state, action) => {
+            if (!action.payload) {
+                return;
+            }
+            state.jwt = action.payload.access_token;
+        });
+        builder.addCase(login.rejected, (state, action) => {
+            state.loginErrorMessage = action.error.message;
+        });
+        builder.addCase(getProfile.fulfilled, (state, action) => {
+            const profileData = action.payload;
+            delete profileData.passwordHash;
+            state.profile = profileData;
+        });
+    }
+});
+
+export default userSlise.reducer;
+export const userActions = userSlise.actions;
