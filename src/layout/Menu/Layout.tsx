@@ -12,6 +12,7 @@ export function Layout() {
     const navigate = useNavigate();
     const dispatch = useDispatch<AppDispatch>();
     const profile = useSelector((s: RootState) => s.user.profile);
+    const items = useSelector((s: RootState) => s.cart.items);
 
     useEffect(() => {
         dispatch(getProfile());
@@ -59,7 +60,12 @@ export function Layout() {
                         <span>Корзина</span>
 
                         <span className={styles['productColumn']}>
-                            <p className={styles['productColumn_text']}>2</p>
+                            <p className={styles['productColumn_text']}>
+                                {items.reduce(
+                                    (acc, item) => (acc += item.count),
+                                    0
+                                )}
+                            </p>
                         </span>
                     </NavLink>
                 </div>
@@ -76,7 +82,6 @@ export function Layout() {
                     <span>Выйти</span>
                 </Button>
             </div>
-
             <Outlet />
         </div>
     );
